@@ -53,10 +53,6 @@ import org.hibernate.persister.entity.EntityPersister;
  */
 @SuppressWarnings( {"JavaDoc"})
 public interface PersistenceContext {
-	/**
-	 * Marker object used to indicate (via reference checking) that no row was returned.
-	 */
-	public static final Object NO_ROW = new MarkerObject( "NO_ROW" );
 
 	@SuppressWarnings( {"UnusedDeclaration"})
 	public boolean isStateless();

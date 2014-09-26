@@ -131,8 +131,6 @@ public class SingleTableEntityPersister extends AbstractEntityPersister {
 	
 	private final Map sequentialSelectStringsByEntityName = new HashMap();
 
-	private static final Object NULL_DISCRIMINATOR = new MarkerObject("<null discriminator>");
-	private static final Object NOT_NULL_DISCRIMINATOR = new MarkerObject("<not null discriminator>");
 	private static final String NULL_STRING = "null";
 	private static final String NOT_NULL_STRING = "not null";
 
@@ -326,12 +324,12 @@ public class SingleTableEntityPersister extends AbstractEntityPersister {
 			}
 			discriminatorType = persistentClass.getDiscriminator().getType();
 			if ( persistentClass.isDiscriminatorValueNull() ) {
-				discriminatorValue = NULL_DISCRIMINATOR;
+				discriminatorValue = MarkerObject.NULL_DISCRIMINATOR;
 				discriminatorSQLValue = InFragment.NULL;
 				discriminatorInsertable = false;
 			}
 			else if ( persistentClass.isDiscriminatorValueNotNull() ) {
-				discriminatorValue = NOT_NULL_DISCRIMINATOR;
+				discriminatorValue = MarkerObject.NOT_NULL_DISCRIMINATOR;
 				discriminatorSQLValue = InFragment.NOT_NULL;
 				discriminatorInsertable = false;
 			}
@@ -423,10 +421,10 @@ public class SingleTableEntityPersister extends AbstractEntityPersister {
 				Subclass sc = (Subclass) iter.next();
 				subclassClosure[k++] = sc.getEntityName();
 				if ( sc.isDiscriminatorValueNull() ) {
-					addSubclassByDiscriminatorValue( NULL_DISCRIMINATOR, sc.getEntityName() );
+					addSubclassByDiscriminatorValue( MarkerObject.NULL_DISCRIMINATOR, sc.getEntityName() );
 				}
 				else if ( sc.isDiscriminatorValueNotNull() ) {
-					addSubclassByDiscriminatorValue( NOT_NULL_DISCRIMINATOR, sc.getEntityName() );
+					addSubclassByDiscriminatorValue( MarkerObject.NOT_NULL_DISCRIMINATOR, sc.getEntityName() );
 				}
 				else {
 					try {
@@ -586,17 +584,17 @@ public class SingleTableEntityPersister extends AbstractEntityPersister {
 					.getExplicitHibernateTypeDescriptor()
 					.getResolvedTypeMapping();
 			if ( entityBinding.getDiscriminatorMatchValue() == null ) {
-				discriminatorValue = NULL_DISCRIMINATOR;
+				discriminatorValue = MarkerObject.NULL_DISCRIMINATOR;
 				discriminatorSQLValue = InFragment.NULL;
 				discriminatorInsertable = false;
 			}
 			else if ( entityBinding.getDiscriminatorMatchValue().equals( NULL_STRING ) ) {
-				discriminatorValue = NOT_NULL_DISCRIMINATOR;
+				discriminatorValue = MarkerObject.NOT_NULL_DISCRIMINATOR;
 				discriminatorSQLValue = InFragment.NOT_NULL;
 				discriminatorInsertable = false;
 			}
 			else if ( entityBinding.getDiscriminatorMatchValue().equals( NOT_NULL_STRING ) ) {
-				discriminatorValue = NOT_NULL_DISCRIMINATOR;
+				discriminatorValue = MarkerObject.NOT_NULL_DISCRIMINATOR;
 				discriminatorSQLValue = InFragment.NOT_NULL;
 				discriminatorInsertable = false;
 			}
@@ -695,10 +693,10 @@ public class SingleTableEntityPersister extends AbstractEntityPersister {
 			for ( EntityBinding subEntityBinding : entityBinding.getPostOrderSubEntityBindingClosure() ) {
 				subclassClosure[k++] = subEntityBinding.getEntity().getName();
 				if ( subEntityBinding.isDiscriminatorMatchValueNull() ) {
-					addSubclassByDiscriminatorValue( NULL_DISCRIMINATOR, subEntityBinding.getEntity().getName() );
+					addSubclassByDiscriminatorValue( MarkerObject.NULL_DISCRIMINATOR, subEntityBinding.getEntity().getName() );
 				}
 				else if ( subEntityBinding.isDiscriminatorMatchValueNotNull() ) {
-					addSubclassByDiscriminatorValue( NOT_NULL_DISCRIMINATOR, subEntityBinding.getEntity().getName() );
+					addSubclassByDiscriminatorValue( MarkerObject.NOT_NULL_DISCRIMINATOR, subEntityBinding.getEntity().getName() );
 				}
 				else {
 					try {
@@ -788,11 +786,11 @@ public class SingleTableEntityPersister extends AbstractEntityPersister {
 
 	public String getSubclassForDiscriminatorValue(Object value) {
 		if (value==null) {
-			return (String) subclassesByDiscriminatorValue.get(NULL_DISCRIMINATOR);
+			return (String) subclassesByDiscriminatorValue.get(MarkerObject.NULL_DISCRIMINATOR);
 		}
 		else {
 			String result = (String) subclassesByDiscriminatorValue.get(value);
-			if (result==null) result = (String) subclassesByDiscriminatorValue.get(NOT_NULL_DISCRIMINATOR);
+			if (result==null) result = (String) subclassesByDiscriminatorValue.get(MarkerObject.NOT_NULL_DISCRIMINATOR);
 			return result;
 		}
 	}

@@ -76,8 +76,6 @@ public class JoinedSubclassEntityPersister extends AbstractEntityPersister {
 	private static final Logger log = Logger.getLogger( JoinedSubclassEntityPersister.class );
 
 	private static final String IMPLICIT_DISCRIMINATOR_ALIAS = "clazz_";
-	private static final Object NULL_DISCRIMINATOR = new MarkerObject("<null discriminator>");
-	private static final Object NOT_NULL_DISCRIMINATOR = new MarkerObject("<not null discriminator>");
 	private static final String NULL_STRING = "null";
 	private static final String NOT_NULL_STRING = "not null";
 
@@ -168,11 +166,11 @@ public class JoinedSubclassEntityPersister extends AbstractEntityPersister {
 				}
 				discriminatorType = (DiscriminatorType) persistentClass.getDiscriminator().getType();
 				if ( persistentClass.isDiscriminatorValueNull() ) {
-					discriminatorValue = NULL_DISCRIMINATOR;
+					discriminatorValue = MarkerObject.NULL_DISCRIMINATOR;
 					discriminatorSQLString = InFragment.NULL;
 				}
 				else if ( persistentClass.isDiscriminatorValueNotNull() ) {
-					discriminatorValue = NOT_NULL_DISCRIMINATOR;
+					discriminatorValue = MarkerObject.NOT_NULL_DISCRIMINATOR;
 					discriminatorSQLString = InFragment.NOT_NULL;
 				}
 				else {
@@ -540,10 +538,10 @@ public class JoinedSubclassEntityPersister extends AbstractEntityPersister {
 					final Object discriminatorValue;
 					if ( explicitDiscriminatorColumnName != null ) {
 						if ( sc.isDiscriminatorValueNull() ) {
-							discriminatorValue = NULL_DISCRIMINATOR;
+							discriminatorValue = MarkerObject.NULL_DISCRIMINATOR;
 						}
 						else if ( sc.isDiscriminatorValueNotNull() ) {
-							discriminatorValue = NOT_NULL_DISCRIMINATOR;
+							discriminatorValue = MarkerObject.NOT_NULL_DISCRIMINATOR;
 						}
 						else {
 							try {
